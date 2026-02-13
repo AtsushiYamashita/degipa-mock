@@ -3,54 +3,51 @@
 ## Branch Flow
 
 ```
-feature/xxx ──→ develop ──→ main
-fix/xxx     ──→ develop ──→ main
-docs/xxx    ──→ develop ──→ main
+feat/issue-<N> ──→ develop ──→ main
+fix/issue-<N>  ──→ develop ──→ main
+docs/xxx       ──→ develop ──→ main
+```
+
+## Git Worktree 運用
+
+メインディレクトリ (`degipa-mock`) は **常に `main`** に留める。
+
+| ディレクトリ | ブランチ | 用途 |
+| --- | --- | --- |
+| `degipa-mock` | `main` | 本体。直接コミットしない |
+| `degipa-mock-develop` | `develop` | 統合ブランチ（worktree） |
+| `degipa-mock-feat-issue-<N>` | `feat/issue-<N>` | 機能開発（worktree） |
+
+```bash
+# worktree 作成
+git worktree add ../degipa-mock-feat-issue-<N> -b feat/issue-<N> develop
+
+# 作業完了後
+git worktree remove ../degipa-mock-feat-issue-<N>
 ```
 
 ## Branch Definitions
 
 | Branch | Purpose | Merge target | Protection |
 | --- | --- | --- | --- |
-| `main` | Production-ready code | — | No direct push |
-| `develop` | Integration branch | `main` | Via PR |
-| `feature/*` | New features | `develop` | Via PR or merge |
+| `main` | Production-ready | — | No direct push |
+| `develop` | Integration | `main` | Via PR |
+| `feat/*` | New features | `develop` | Via PR or merge |
 | `fix/*` | Bug fixes | `develop` | Via PR or merge |
-| `docs/*` | Documentation only | `develop` | Via PR or merge |
-| `experiment/*` | Throwaway experiments | `develop` (if successful) | Optional |
+| `docs/*` | Documentation | `develop` | Via PR or merge |
 
 ## Rules
 
 1. **Never commit directly to `main`** — always go through `develop`
-2. **Create working branches from `develop`** — not from `main`
+2. **Create working branches from `develop`** via `git worktree add`
 3. **Keep branches short-lived** — merge or delete within a few days
-4. **Use descriptive branch names** — `feature/onboarding-flow`, not `feature/stuff`
+4. **Use issue-based branch names** — `feat/issue-42`, not `feature/stuff`
+5. **1 worktree = 1 ブランチ = 1 目的**
 
 ## Naming Convention
 
 ```
-<type>/<short-description>
+<type>/issue-<number>
 
-Types: feature, fix, docs, experiment, refactor
-```
-
-## Quick Reference
-
-```bash
-# Start new feature
-git checkout develop
-git pull origin develop
-git checkout -b feature/my-feature
-
-# Merge to develop
-git checkout develop
-git pull origin develop
-git merge feature/my-feature
-git push origin develop
-
-# Release to main
-git checkout main
-git merge develop
-git tag -a v0.1.0 -m "Release v0.1.0"
-git push origin main --tags
+Types: feat, fix, docs, experiment, refactor
 ```

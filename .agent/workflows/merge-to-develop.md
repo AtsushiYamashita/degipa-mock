@@ -1,27 +1,28 @@
 ---
-description: Merge a feature branch into develop
+description: Merge a feature worktree branch into develop
 ---
 
-1. Ensure all changes are committed on your feature branch
+1. Ensure all changes are committed in the feature worktree
 
 // turbo
-2. Switch to develop and pull latest
+2. Switch to develop worktree and pull latest
 ```bash
-git checkout develop; git pull origin develop
+git -C d:\project\degipa-mock-develop pull origin develop
 ```
 
-3. Merge the feature branch (replace `feature/xxx`)
+3. Merge the feature branch (replace `feat/issue-<number>`)
 ```bash
-git merge feature/xxx
+git -C d:\project\degipa-mock-develop merge feat/issue-<number>
 ```
 
-4. Resolve conflicts if any, then:
+4. Resolve conflicts if any, then push
 // turbo
 ```bash
-git push origin develop
+git -C d:\project\degipa-mock-develop push origin develop
 ```
 
-5. Delete the feature branch (optional)
+5. Remove the feature worktree and delete the branch
 ```bash
-git branch -d feature/xxx
+git worktree remove ../degipa-mock-feat-issue-<number>
+git branch -d feat/issue-<number>
 ```
